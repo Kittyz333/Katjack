@@ -57,132 +57,51 @@ int PlaceBet() { // Informs current coins,
 	return score, bet, betcost;
 }
 void RoundStart() {
-	cout << "Round: " << gameround << "\n";
-	cout << "Let me deal you in.\n";
-	cout << "Your first card is the ";
-	CardCall();
-	HandUpdate();
-	PrintCard(cardnum, cardst);
-	cout << "\n";
-	cout << "Your second card is the ";
-	CardCall();
-	HandUpdate();
-	PrintCard(cardnum, cardst);
-	cout << "\n";
-	cout << "Your hand total is: " << plhand << "\n\n";
 
-	CardCall();
-	DealerUpdate();
-	CardCall();
-	DealerUpdate();
-	cout << "The dealer reveals their face-up card is the ";
-	PrintCard(cardnum, cardst);
-	cout << "Their hand value is " << ophand << "\n";
-}
-
-int NewRound() {
-	gameround++;
-    return gameround;
 }
 
 void Round() { //Ew. Okay. So, in this one, we handle a round loop that calls Decision, but I believe I should be handling this differently.
 
-		cout << "Round: " << gameround << "\n";
-		Decision();
-		DealerDecision();
+	 // Replace with the class method properly.
 }
 
-int HandUpdate() { //The update for the player's hand. ((Removed win condition article.))
-	    plhand = plhand + cardval;
-		return plhand;
-}
-
-int DealerUpdate() { //The update for the dealer's hand. ((Removed win condition article.))
-		ophand = ophand + cardval;
-		return ophand;
-}
-
-bool CheckBust() {
-	if (plhand > 21) {
-		plbust = true;
-	}
-	else {
-		plbust = false;
-	}
-	return plbust;
-}
-bool DlrCheckBust() {
-	if (ophand > 21) {
-		dlrbust = true;
-	}
-	else {
-		dlrbust = false;
-	}
-	return dlrbust;
-}
-
-void Decision() { // Asks what if you'd like to hit, stand, etc, and performs the trigger. ((Dealer currently forced to draw here.))
+int Decision() { // Asks what if you'd like to hit, stand, etc, and performs the trigger. ((Dealer currently forced to draw here.))
 
 	cout << "What would you like to do?\n";
 	cout << "1. Hit 2. Stand\n";
 	cout << "3. Double Down 4. Fold\n";
 		cin >> act;
-		if (act == 1) {
-			CardCall();
-			HandUpdate();
-			cout << "You are dealt the";
-			PrintCard(cardnum, cardst);
-			cout << "\n";
-			cout << "Your hand total is: " << plhand << "\n";
-		}
-		else if (act == 2) {
-			cout << "You have chosen to stand.\n";
-
-		}
-		else if (act == 3) {
-			DoubleDown();
-		}
-		else if (act == 4) {
-			cout << "You have folded!\n";
-			ReturnBet();
-			GameRepeat();
-		}
+		return act;
 }
 
 void DealerDecision() { //Dealer makes their choice, error possibly here?
-	if (ophand < 17) {
-		CardCall();
-		DealerUpdate();
-		cout << "The dealer has drawn the ";
-		PrintCard(cardnum, cardst);
-	}
-	else {
-		cout << "The dealer has chosen to stand.\n";
-	}
+
 }
+
 int GameRepeat() { //Asks if player would like to start a new game or close.
 	cout << "What would you like to do?\n";
 		cout << "1. Next Round 2. Close\n";
 		cin >> act;
-	if (act == 1) { //Find a way to restart game properly.
-		system("cls");
-		gameround = 0;
-		return gameround;
-	}
+		if (act == 1) { //Find a way to restart game properly.
+			system("cls");
+			gameround = 0;
+			return gameround;
+		}
+		else {
+			return 0;
+		}
 }
 
 int GameWin() { //Twin of GameLoss.
-	GameScore();
 	int currentwin = (gamescore * bet) + betcost;
 	score = score + currentwin;
 	cout << "You have won " << currentwin << " coins because of your bet of " << betcost << " coins!\n";
 	cout << "You now have " << score << " coins.\n";
 	cout << "The combined hand total was: " << combinedhands << ". The game score was: " << gamescore << ".\n";
-	return score, gamescore;
+	return score;
 }
 
 int GameLoss() { //Twin of GameWin. Calls GameScore to access necessary variables to print, clears board and returns the score. 
-	GameScore();
 	int currentloss = gamescore;
 	score = score - currentloss;
 	currentloss = currentloss + betcost;
@@ -190,6 +109,12 @@ int GameLoss() { //Twin of GameWin. Calls GameScore to access necessary variable
 	cout << "You now have " << score << " coins.\n";
 	cout << "The combined hand total was: " << combinedhands << " The game score was: " << gamescore << "\n";
 	return score;
+}
+
+int GameScore(int hand1, int hand2) { //Returns combinedhands and gamescore for end of game print.
+	combinedhands = hand1 + hand2; //Change this to take the values of the player and dealer object's hands.
+	gamescore = combinedhands * 3;
+	return combinedhands, gamescore;
 }
 
 int ReturnBet() { //Halves the bet paid and returns it to player in the event of tie or fold.
@@ -200,25 +125,15 @@ int ReturnBet() { //Halves the bet paid and returns it to player in the event of
 	return score;
 }
 
-int GameScore() { //Returns combinedhands and gamescore for end of game print.
-	combinedhands = plhand + ophand;
-	gamescore = combinedhands * 3;
-	return combinedhands, gamescore;
-}
-
-int ResetScores() { //Resets all scores (except running player score).
-	act = 0;
-	combinedhands = 0;
+int ResetScores() { //Resets all scores (except running player score). Error in loop definitely here.
+	combinedhands = 0; //Possibly reset with loop and others somehow.
 	gamescore = 0;
-	plhand = 0;
-	ophand = 0;
-	bet = 0;
+	bet = 0; //Possibly reset separate from loop and gameround, or with.
 	betcost = 0;
-	gameround = 0;
+	gameround = 0; //Reset this, loop and act somewhere safely.
 	loop = 0;
-	plbust = false;
-	dlrbust = false;
-	return act, combinedhands, gamescore, plhand, ophand, bet, betcost, gameround, loop;
+	act = 0;
+	return act, combinedhands, gamescore, bet, betcost, gameround, loop;
 }
 
 int DoubleDown() {
@@ -227,10 +142,55 @@ int DoubleDown() {
 	cout << "You have doubled down your bet of " << betcost << ".\n";
 	betcost = betcost + betcost;
 	cout << "You have bet a total of " << betcost << " on this hand.\n";
-	return score, betcost;
+	return score, betcost, bet;
 }
 
-int RoundRestart() {
-	gameround = 0;
-		return gameround;
+void Welcome() {
+	int msggen = 1 + (rand() % 5);
+
+	if (msgr = 0) {
+		cout << "Welcome to Katjack!\n"; //Possibly make this have options: 1. Play Alone 2. Play Together 3. Read Rules 4. Change Decks
+	}
+
+	else if (msgr = 1) { //Winning return messages
+		switch (msggen) {
+		case 1:
+			cout << "Great job! Let's play again.\n";
+			break;
+		case 2:
+			cout << "Keep it up! New game!\n";
+			break;
+		case 3:
+			cout << "That was good! let's try another!\n";
+			break;
+		case 4:
+			cout << "Another one, another one!\n";
+			break;
+		case 5:
+			cout << "Let's keep playing!\n";
+			break;
+		}
+
+	}
+
+	else if (msgr = 2) { //Losing return messages
+		switch (msggen) {
+		case 1:
+			cout << "Better like this time.\n";
+			break;
+		case 2:
+			cout << "Maybe next time...\n";
+			break;
+		case 3:
+			cout << "So close! Let's try again.\n";
+			break;
+		case 4:
+			cout << "Don't give up now!\n";
+			break;
+		case 5:
+			cout << "We all have our days.\n";
+			break;
+
+		}
+	}
 }

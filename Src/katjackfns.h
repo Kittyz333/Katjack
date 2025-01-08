@@ -8,8 +8,6 @@ using namespace std;
 extern int cardval;
 extern int cardnum;
 extern int cardst;
-extern int plhand;
-extern int ophand;
 extern int combinedhands;
 extern int act;
 extern int score;
@@ -18,8 +16,36 @@ extern int gameround;
 extern int gamescore;
 extern int bet;
 extern int betcost;
-extern bool plbust;
-extern bool dlrbust;
+extern int msgr;
+
+
+class Player {
+public:
+
+	int hand;
+	bool bust;
+
+	Player() {
+		hand = 0;
+		bust = false;
+	}
+
+	int HandUpdate() { //Adds value of drawn card to hand.
+		hand = hand + cardval;
+		return hand;
+	}
+
+	bool CheckBust() {
+		if (hand > 21) {
+			bust = true;
+		}
+		else {
+			bust = false;
+		}
+		return bust;
+	}
+
+};
 
 void RoundStart();
 
@@ -31,13 +57,9 @@ int CardCall();
 
 void PrintCard(int cardnum, int cardst);
 
-int HandUpdate();
-
-int DealerUpdate();
-
 void DealerDecision();
 
-void Decision();
+int Decision();
 
 int GameRepeat();
 
@@ -55,8 +77,6 @@ int ResetScores();
 
 int DoubleDown();
 
-bool CheckBust();
+int GameScore(int hand1, int hand2);
 
-bool DlrCheckBust();
-
-int RoundRestart();
+void Welcome();
