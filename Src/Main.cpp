@@ -14,20 +14,18 @@ int bet = 0;
 int betcost = 0;
 int gamescore = 0;
 int syst = 1;
-int msgr = 0;
+int msgtkn = 0;
 
 int main()
 {
 	srand(time(0));
 
-	while (syst = 1) {
-		cout << "Loop: " << loop << " Round: " << gameround << "\n";
+	while (syst == 1) {
 
 		Player P1;
 		Player Dealer;
 
 		do {
-			gameround = 0;
 			combinedhands = 0;
 			act = 0;
 			bet = 0;
@@ -35,7 +33,8 @@ int main()
 			gamescore = 0;
 
 
-			Welcome();
+			Welcome(msgtkn);
+			msgtkn = 1;
 			PlaceBet();
 			cout << "Round: " << gameround << "\n";
 			cout << "Let me deal you in.\n";
@@ -57,7 +56,7 @@ int main()
 			Dealer.HandUpdate();
 			cout << "The dealer reveals their face-up card is the ";
 			PrintCard(cardnum, cardst);
-			cout << "Their hand value is " << Dealer.hand << "\n";
+			cout << "\n";
 			P1.CheckBust();
 
 			if (P1.bust == true) {
@@ -65,7 +64,7 @@ int main()
 				GameScore(P1.hand, Dealer.hand);
 				GameLoss();
 				GameRepeat();
-				loop = 0;
+				msgtkn = 2;
 			}
 			else {
 				gameround++;
@@ -74,7 +73,6 @@ int main()
 		} while (gameround < 1);
 
 		for (gameround == 1; gameround < 3; gameround++) { //Rewrite average round here.
-			cout << loop;
 			cout << "Round: " << gameround << "\n";
 			P1.CheckBust();
 			if (P1.bust == true) {
@@ -97,7 +95,14 @@ int main()
 
 			}
 			else if (act == 3) {
-				DoubleDown();
+				if (betcost > score) {
+					cout << "Not enough coins! Try something else!\n";
+					Decision();
+				}
+				else 
+				{
+					DoubleDown();
+				}
 			}
 			else if (act == 4) {
 				cout << "You have folded!\n";
@@ -113,13 +118,12 @@ int main()
 			else {
 				cout << "The dealer has chosen to stand.\n";
 			}
+			cout << "\n";
 		}
 
 		while (gameround == 3) { //This line should be good.
-			cout << loop;
 			P1.CheckBust();
 			Dealer.CheckBust();
-			cout << P1.bust << " dlr: " << Dealer.bust << "\n";
 			if ((P1.bust == true && Dealer.bust == true) || P1.hand == Dealer.hand) {
 				cout << "No one has won. Tie!\n";
 				ReturnBet();
@@ -127,16 +131,17 @@ int main()
 			}
 			else if (P1.bust == true) {
 				cout << "Bust! Try again! \n";
-				cout << "Player " << P1.bust << "Dealer " << Dealer.bust << "\n";
 				GameLoss();
 				GameScore(P1.hand, Dealer.hand);
 				GameRepeat();
+				msgtkn = 2;
 			}
 			else if (Dealer.bust == true) {
 				cout << "Dealer has bust! You win! \n";
 				GameScore(P1.hand, Dealer.hand);
 				GameWin();
 				GameRepeat();
+
 			}
 			else if (P1.hand > Dealer.hand) {
 				cout << "Your hand is closest to 21!\n";
@@ -149,6 +154,7 @@ int main()
 				GameScore(P1.hand, Dealer.hand);
 				GameLoss();
 				GameRepeat();
+				msgtkn = 2;
 			}
 		}
 	}

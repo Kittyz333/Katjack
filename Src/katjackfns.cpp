@@ -4,31 +4,45 @@
 #include <ctime>
 
 int CardCall() {
-	int cardgen = 1 + (rand() % 52);
+	int cardgen = 1 + (rand() % 53);
+	int cardid = 0;
 
 	if (cardgen < 14) {
 		cardst = 0;
-		cardval = cardgen;
+		cardid = cardgen;
 	}
 	else if (cardgen > 13 && cardgen < 27) {
 		cardst = 1;
-		cardval = cardgen - 13;
+		cardid = cardgen - 13;
 	}
 	else if (cardgen > 26 && cardgen < 40) {
 		cardst = 2;
-		cardval = cardgen - 26;
+		cardid = cardgen - 26;
 	}
-	else if (cardgen > 39 && cardgen < 53) {
+	else if (cardgen > 39 && cardgen < 54) {
 		cardst = 3;
-		cardval = cardgen - 39;
+		cardid = cardgen - 39;
 	}
-	cardnum = cardval - 1;
+
+	if (cardid == 14) {
+		cardval = 13;
+		cardnum = 13;
+		cardst = 4;
+	}
+	else if (cardid > 10) {
+		cardval = 10;
+	}
+	else {
+		cardval = cardid;
+	}
+
+	cardnum = cardid - 1;
 	return cardval, cardnum, cardst;
 }
 
 void PrintCard(int cardface, int cardsuit) {
-	string cards[13] = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", };
-	string suits[4] = { "of Clubs", "of Diamonds", "of Hearts", "Of Spades" };
+	string cards[14] = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "The" };
+	string suits[5] = { "of Clubs", "of Diamonds", "of Hearts", "Of Spades", "Joker"};
 	cout << cards[cardface] << " " << suits[cardsuit] << "\n";
 }
 
@@ -145,14 +159,14 @@ int DoubleDown() {
 	return score, betcost, bet;
 }
 
-void Welcome() {
+void Welcome(int msgr) {
 	int msggen = 1 + (rand() % 5);
 
-	if (msgr = 0) {
+	if (msgr == 0) {
 		cout << "Welcome to Katjack!\n"; //Possibly make this have options: 1. Play Alone 2. Play Together 3. Read Rules 4. Change Decks
 	}
 
-	else if (msgr = 1) { //Winning return messages
+	else if (msgr == 1) { //Winning return messages
 		switch (msggen) {
 		case 1:
 			cout << "Great job! Let's play again.\n";
@@ -173,7 +187,7 @@ void Welcome() {
 
 	}
 
-	else if (msgr = 2) { //Losing return messages
+	else if (msgr == 2) { //Losing return messages
 		switch (msggen) {
 		case 1:
 			cout << "Better like this time.\n";

@@ -49,8 +49,6 @@ public:
 
 void RoundStart();
 
-int NewRound();
-
 void Round();
 
 int CardCall();
@@ -71,12 +69,10 @@ int ReturnBet();
 
 int PlaceBet();
 
-int GameScore();
-
 int ResetScores();
 
 int DoubleDown();
 
 int GameScore(int hand1, int hand2);
 
-void Welcome();
+void Welcome(int msgr);
